@@ -5,9 +5,7 @@ import 'package:trining/model/item.dart';
 
 class BottomSheetttt extends StatefulWidget {
   final Item item;
-
   const BottomSheetttt({Key? key, required this.item}) : super(key: key);
-
   @override
   State<BottomSheetttt> createState() => _BottomSheettttState();
 }
@@ -15,60 +13,93 @@ class BottomSheetttt extends StatefulWidget {
 class _BottomSheettttState extends State<BottomSheetttt> {
   int quantity = 1;
 
+  @override
   Widget build(BuildContext context) {
     return Consumer<Cart>(
-      builder: (context, value, child) {
-        return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
-          itemCount:
-              1, // Assuming you are adding only one item in the bottom sheet
+      builder: (context, cart, child) {
+        return ListView.builder(
+          itemCount: 1,
           itemBuilder: (context, i) {
-            return Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("ID: ${value.items[i].id}"),
-                  Text("Name: ${value.items[i].name}"),
-                  Text("Price: \$${value.items[i].price.toStringAsFixed(2)}"),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () {
-                          setState(() {
-                            if (quantity > 1) {
-                              quantity--;
-                            }
-                          });
-                        },
-                      ),
-                      Text("$quantity"),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          setState(() {
-                            quantity++;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      value.add(Item(
-                        id: value.items[i].id,
-                        name: value.items[i].name,
-                        price: value.items[i].price,
-                        quantity: quantity,
-                      ));
-                      Navigator.pop(context);
-                    },
-                    child: Text("Add to Cart"),
-                  ),
-                ],
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: "ID",
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: "Name",
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: "Price",
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: "quantity",
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Consumer<Cart>(builder: (context, cart, child) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              final existingItemIndex = cart.items
+                                  .indexWhere((i) => i.id == widget.item.id);
+                              if (existingItemIndex >= 0) {
+                                cart.items[existingItemIndex].quantity +=
+                                    quantity;
+                              } else {
+                                cart.add(Item(
+                                  id: cart.items[i].id,
+                                  name: cart.items[i].name,
+                                  price: cart.items[i].price,
+                                  quantity: quantity,
+                                ));
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Text("ok"),
+                          );
+                        })
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           },
