@@ -4,23 +4,21 @@ import 'item.dart';
 class Cart with ChangeNotifier {
   List<Item> items = [];
   double _total = 0.0;
-  List<String> productName = ['Mango', 'orange', "apple", "lemone"];
-  List<int> productid = [0, 1, 2, 3];
-  List<int> producproce = [40, 20, 20, 10];
 
   Cart() {
     items = [
-      Item(id: 0, name: "orange", price: 20),
-      Item(id: 1, name: "apple", price: 19),
-      Item(id: 2, name: "lemon", price: 5),
-      Item(id: 3, name: "Mango", price: 40)
+      Item(id: 0, name: "orange", price: 20, quantity: 1),
+      Item(id: 1, name: "apple", price: 19, quantity: 1),
+      Item(id: 2, name: "lemon", price: 5, quantity: 1),
+      Item(id: 3, name: "Mango", price: 40, quantity: 1),
     ];
+    _updateTotal();
   }
 
   void add(Item item) {
     final existingItemIndex = items.indexWhere((i) => i.id == item.id);
     if (existingItemIndex >= 0) {
-      items[existingItemIndex].quantity += item.quantity;
+      items[existingItemIndex].quantity = item.quantity;
     } else {
       items.add(item);
     }
@@ -63,9 +61,6 @@ class Cart with ChangeNotifier {
   }
 
   double get totalprice {
-    for (var item in items) {
-      _total += item.price;
-    }
     return _total;
   }
 
